@@ -1,11 +1,15 @@
 # docker-boinc
 This is an expansion on LinuxServer/boinc image to include nut-client for suspending while on UPS battery and resuming tasks when power is back online.
 
+## ToDo
+* Add cross platform Dockerfile and builds
+
 ## New Environmental Variables in this Docker vs linuxserver/boinc
 * NUT_UPS - Name of ups on NUT server
 * NUT_SERVER - IP Address or hostname of NUT server
 * NUT_USER - Username of NUT server
 * NUT_SECRET - Password for user on NUT server
+* HOSTNAME - (Optional - Experimental) Set instance hostname for use in BOINC
 
 ## Setup Exclusive Applications in BOINC Client
 * Open BOINC administration webUI
@@ -36,6 +40,7 @@ docker create \
   -e NUT_SERVER=192.168.1.10 \
   -e NUT_USER=user \
   -e NUT_SECRET=secret \
+  -e HOSTNAME=boinc01 `#optional` \
   -p 8080:8080 \
   -v /path/to/data:/config \
   --device /dev/dri:/dev/dri `#optional` \
@@ -65,6 +70,7 @@ services:
 	  - NUT_SERVER=192.168.1.10
 	  - NUT_USER=user
 	  - NUT_SECRET=secret
+	  - HOSTNAME=boinc01 #optional
     volumes:
       - /path/to/data:/config
     ports:
@@ -90,6 +96,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e NUT_SERVER=192.168.1.10` | IP Address or hostname of NUT server. |
 | `-e NUT_USER=user` | Username on NUT server. |
 | `-e NUT_SECRET=secret` | Password for user on NUT server. |
+| `-e HOSTNAME=boinc01` | Experimental - Set instance hostname for BOINC. |
 | `-v /config` | Where BOINC should store its database and config. |
 | `--device /dev/dri` | Only needed if you want to use your Intel GPU (vaapi). |
 

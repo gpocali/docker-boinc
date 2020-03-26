@@ -22,12 +22,20 @@ DEADTIME 15
 POWERDOWNFLAG /etc/killpower
 NOTIFYMSG ONLINE      \"UPS-ON-LINE\"
 NOTIFYMSG ONBATT      \"UPS-ON-BATTERY\"
+NOTIFYFLAG ONBATT SYSLOG+WALL+EXEC
+NOTIFYFLAG ONLINE SYSLOG+WALL+EXEC
 RBWARNTIME 43200
 NOCOMMWARNTIME 300
 FINALDELAY 5
 " > /etc/nut/upsmon.conf
 
-/etc/init.d/ups-monitor restart
+if [ -z "${HOSTNAME}" ]; then
+    echo -n ${HOSTNAME} > /etc/hostname
+fi
+
+echo $(date) - System Launch > /var/log/nutWait.log
+
+upsmon -c reload
 
 while true; do
     sleep 86400

@@ -1,12 +1,17 @@
 #!/bin/bash
 # NUT Notify Executable that will wait for appearance of file created by NUTendWait
 # This is used as the exclusive application so that the boinc tasks suspend on UPS battery
+echo $(date) - nutWait Start Arg: "$1" | tee -a /var/log/nutWait
 if [[ $1 == "UPS-ON-BATTERY" ]]; then
     if [ -e /tmp/nutEndWait ]; then
         rm /tmp/nutEndWait
     fi
+    sleep 1
+    echo -n $(date) - Waiting for power to be restored... | tee -a /var/log/nutWait
     while [ ! -e /tmp/nutEndWait ]; do
         sleep 1
+        echo -n . | tee -a /var/log/nutWait
     done
+    echo Power Restored - $(date) | tee -a /var/log/nutWait
 fi
 exit 0

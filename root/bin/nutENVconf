@@ -29,4 +29,8 @@ FINALDELAY 5
 
 /etc/init.d/ups-monitor restart
 
+while true; do
+    sleep 86400
+done
+
 exit 0

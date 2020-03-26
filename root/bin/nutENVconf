@@ -5,40 +5,47 @@
 # NUT_SERVER - IP Address or hostname of NUT server
 #   NUT_USER - Username on NUT server
 # NUT_SECRET - Password for user on NUT server
+#   HOSTNAME - Set System Hostname (Experimental - Optional)
 
 # nut.conf  upsmon.conf
 echo "MODE=netclient
 " > /etc/nut/nut.conf
 
-echo "MONITOR ${NUT_UPS}@${NUT_SERVER} 1 ${NUT_USER} ${NUT_SECRET} slave
+echo "# upsmon.conf
+MONITOR ${NUT_UPS}@${NUT_SERVER} 1 ${NUT_USER} ${NUT_SECRET} slave
 MINSUPPLIES 1
 SHUTDOWNCMD \"/sbin/shutdown -h +0\"
-NOTIFYCMD /usr/bin/nutWait
-NOTIFYCMD /bin/nutEndWait
+NOTIFYCMD /sbin/upssched
 POLLFREQ 5
 POLLFREQALERT 5
 HOSTSYNC 15
 DEADTIME 15
 POWERDOWNFLAG /etc/killpower
-NOTIFYMSG ONLINE      \"UPS-ON-LINE\"
-NOTIFYMSG ONBATT      \"UPS-ON-BATTERY\"
-NOTIFYFLAG ONBATT SYSLOG+WALL+EXEC
-NOTIFYFLAG ONLINE SYSLOG+WALL+EXEC
+NOTIFYFLAG ONLINE EXEC
+NOTIFYFLAG ONBATT EXEC
+NOTIFYFLAG LOWBATT EXEC
 RBWARNTIME 43200
 NOCOMMWARNTIME 300
 FINALDELAY 5
 " > /etc/nut/upsmon.conf
 
+echo "PIPEFN /var/run/nut/upssched.pipe
+LOCKFN /var/run/nut/upssched.lock
+CMDSCRIPT /usr/bin/nutWait
+AT ONLINE * EXECUTE online
+AT ONBATT * EXECUTE onbatt
+AT LOWBATT * EXECUTE lowbatt
+" > /etc/nut/upssched.conf
+
 if [ -z "${HOSTNAME}" ]; then
     echo -n ${HOSTNAME} > /etc/hostname
 fi
 
-echo $(date) - System Launch > /var/log/nutWait.log
-
-upsmon -c reload
+/etc/init.d/ups-monitor start
 
 while true; do
     sleep 86400
+    # Never exit
 done
 
 exit 0

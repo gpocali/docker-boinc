@@ -1,6 +1,0 @@
-#!/bin/bash
-# NUT Notify Executable that will end NUTendWait
-if [[ $1 == "UPS-ON-LINE" ]]; then
-    echo "1" > /tmp/nutEndWait
-fi
-exit 0

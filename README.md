@@ -1,7 +1,7 @@
 # docker-boinc
-This is an expansion on LinuxServer/docker-boinc image to include nut-client for suspending while on UPS battery and resuming tasks when power is back online.
+This is an expansion on LinuxServer/boinc image to include nut-client for suspending while on UPS battery and resuming tasks when power is back online.
 
-## New Environmental Variables in this Docker vs linuxserver/docker-boinc
+## New Environmental Variables in this Docker vs linuxserver/boinc
 * NUT_UPS - Name of ups on NUT server
 * NUT_SERVER - IP Address or hostname of NUT server
 * NUT_USER - Username of NUT server
@@ -17,7 +17,7 @@ This is an expansion on LinuxServer/docker-boinc image to include nut-client for
 * You should now see nutWait listed in both sections, click Save
 * Verify that the Activity menu has 'Run based on preferences' and 'Use GPU based on preferences' selected (required)
 
-# Modified linuxserver/docker-boinc readme
+# Modified linuxserver/boinc readme
 ## Usage
 
 Here are some example snippets to help you get started creating a container.
